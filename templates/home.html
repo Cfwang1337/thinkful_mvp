@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    <form action="/results" method="post">
+      <div name="form_field">
+        <label for="text_to_parse">Text to Analyze</label>
+        <textarea name = "text_to_parse" rows="10" cols="50"></textarea>
+      </div>
+      <input type="submit" id="submit" value="PARSE!" />
+    </form>
+{% endblock %}
