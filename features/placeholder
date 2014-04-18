@@ -1,0 +1,9 @@
+    Scenario: check that the form submits successfully
+        When I go to the text summarizer
+        And I submit the form with a valid string
+        Then I should see the results page
+
+    Scenario: check that the text summarizer displays the correct output
+        When I go to the text summarizer
+        And I submit 'How much wood could a woodchuck chuck if a woodchuck could chuck wood' for text to analyze
+        Then I should see "Nouns: woodchuck:2, wood:2 and Verbs: chuck:2" displayed on the results page
