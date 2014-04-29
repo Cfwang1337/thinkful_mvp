@@ -5,15 +5,13 @@ def step_impl(context):
 @then(u'I should see the policy parser')
 def step_impl(context):
     assert context.browser.title == "Policy Parser"
-'''
 
-@when(u'I submit the form with a valid string')
+@when(u'I click the "education" link')
 def step_impl(context):
     br = context.browser
     br.get('http://localhost:5000')
-    text_to_parse = br.find_element_by_name("text_to_parse")
-    text_to_parse.send_keys("valid string")
     br.find_element_by_id("submit").click()
+'''
 
 @then(u'I should see the results page')
 def step_impl(context):
