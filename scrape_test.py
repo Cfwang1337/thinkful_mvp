@@ -10,6 +10,7 @@ import nltk
 from bs4 import BeautifulSoup
 import numpy
 import collections
+from parsers import heritage_foundation_scrape
 
 def small_clean(xstr):
     if xstr is None:

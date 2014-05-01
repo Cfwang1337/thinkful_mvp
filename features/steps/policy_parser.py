@@ -10,6 +10,9 @@ def step_impl(context):
 def step_impl(context):
     br = context.browser
     br.get('http://localhost:5000')
+
+    ed_xpath = "/html/body/header/div/strong/nav/ul/li[2]/a"
+
     br.find_element_by_id("submit").click()
 '''
 
