@@ -48,18 +48,25 @@ for numb in range(0,len(all_reports)):
     #print amended_url
     page = requests.get(amended_url,timeout=120)
     subsouper = BeautifulSoup(page.content)
+    for script in subsouper('script'):
+        script.extract()
     subsouperstr = strip_tags(str(subsouper))
     #print subsouperstr
     text = nltk.word_tokenize(subsouperstr)
     output = nltk.pos_tag(text)
 
+    #print len(output)
+    #print output[0]
+
     for element in output:
+        noun_element = ""
+        verb_element = ""
         if "NN" in str(element[1]):
-            element = element[0].lower()
-            noun_list.append(element)
+            noun_element = element[0].lower()
+            noun_list.append(noun_element)
         if "VB" in str(element[1]):
-            element = element[0].lower()
-            verb_list.append(element)
+            verb_element = element[0].lower()
+            verb_list.append(verb_element)
 
     #print noun_list
     #print verb_list
@@ -77,10 +84,10 @@ noun_counts = noun_counter.most_common()
 
 verb_counter = collections.Counter(verb_list)
 verb_counts = verb_counter.most_common()
-#print noun_counts
-open("noun_sample",'w').write(str(noun_counts))
-#print verb_counts    
-open("verb_sample",'w').write(str(verb_counts))
+print noun_counts
+open("noun_sample.txt",'w').write(str(noun_counts))
+print verb_counts    
+open("verb_sample.txt",'w').write(str(verb_counts))
 
 driver.close()
 driver.quit() 
