@@ -10,18 +10,53 @@ import re
 import nltk
 import collections
 
+def small_clean(xstr):
+    if xstr is None:
+        xstr = ""
+        return xstr
+    else:    
+        xstr = "".join([x if ord(x) < 128 else ' ' for x in xstr])
+        xstr=re.sub(r"\n"," ",xstr)
+        xstr=re.sub(r"\r"," ",xstr)
+        xstr=re.sub(r"\t"," ",xstr)
+        xstr=re.sub(r"`"," ",xstr)
+        xstr=re.sub(r"--"," ",xstr)
+        xstr = re.sub(r'[^\w]', ' ', xstr)
+        xstr = ' '.join(xstr.split())
+        xstr = xstr.encode('utf-8').strip()
+        xstr=str(xstr)
+        return xstr      
+
 def strip_tags(value):
     """Returns the given HTML with all tags stripped."""
     return re.sub(r'<[^>]*?>', '',value)
+
+def keyword_parse(textblob):
+    noun_list = []
+    verb_list = []
+    text = nltk.word_tokenize(textblob)
+    output = nltk.pos_tag(text)
+    for element in output:
+        noun_element = ""
+        verb_element = ""
+        if "NN" in str(element[1]):
+            noun_element = element[0].lower()
+            noun_list.append(noun_element)
+        if "VB" in str(element[1]):
+            verb_element = element[0].lower()
+            verb_list.append(verb_element)
+    return noun_list, verb_list    
+
+def pos_counter(pos_list):
+    pos_counter = collections.Counter(pos_list)
+    pos_counts = pos_counter.most_common()
+    return pos_counts
 
 base_url = "http://www.heritage.org/issues/education"
 
 '''
 def heritage_foundation_scrape(publications,base_url):
-open(file_name,'w').write(str(souper.prettify))
-file_name = "sample.txt"
-'''    
-
+'''
 
 display = Display(visible=0, size=(800,600))
 display.start()
@@ -35,16 +70,35 @@ clicker.click()
 time.sleep(5)
 page = driver.page_source
 souper = BeautifulSoup(page)
-#print souper.prettify()
+
 strsouper = str(souper)
 all_reports = souper.findAll('ul',{"id":"LoadResearchRecords"})[0].findAll('li')
-#print len(all_reports)
-noun_list = []
-verb_list = []
+
+string_blob = ""
+
 for numb in range(0,len(all_reports)):
     #print all_reports[numb].getText()
+    authors = []
+    try:
+        author_list = all_reports[numb].findAll('a',{"class":"author-link"})
+        #print author_list
+        for author in author_list:
+            #print author
+            authors.append(author.getText())
+        #raw_input()
+    except:
+        pass
+    print authors
+    title = all_reports[numb].findAll('a',{"class":"item-title"})[0].getText()
+    print title
     url = all_reports[numb].findAll('a')[0].attrs.get('href')
+    print url
     amended_url = "http://www.heritage.org/" + url
+
+    month = url.split('/')[-2]
+    year = url.split('/')[-3]
+
+    print str(month) + " | " + str(year)
     #print amended_url
     page = requests.get(amended_url,timeout=120)
     subsouper = BeautifulSoup(page.content)
@@ -52,41 +106,18 @@ for numb in range(0,len(all_reports)):
         script.extract()
     subsouperstr = strip_tags(str(subsouper))
     #print subsouperstr
-    text = nltk.word_tokenize(subsouperstr)
-    output = nltk.pos_tag(text)
+    string_blob = string_blob + " " + subsouperstr
 
-    #print len(output)
-    #print output[0]
+string_blob = small_clean(string_blob)
+#print string_blob
+n_list,v_list = keyword_parse(string_blob)
+noun_counts = pos_counter(n_list)
+verb_counts = pos_counter(v_list)
 
-    for element in output:
-        noun_element = ""
-        verb_element = ""
-        if "NN" in str(element[1]):
-            noun_element = element[0].lower()
-            noun_list.append(noun_element)
-        if "VB" in str(element[1]):
-            verb_element = element[0].lower()
-            verb_list.append(verb_element)
 
-    #print noun_list
-    #print verb_list
-
-    '''
-    text_counter = collections.Counter(text)
-    text_counts = text_counter.most_common()
-    file_name = "sample.txt"
-    print text_counts
-    raw_input()
-    '''
-
-noun_counter = collections.Counter(noun_list)
-noun_counts = noun_counter.most_common()
-
-verb_counter = collections.Counter(verb_list)
-verb_counts = verb_counter.most_common()
-print noun_counts
+print noun_counts[:30]
 open("noun_sample.txt",'w').write(str(noun_counts))
-print verb_counts    
+print verb_counts[:30]    
 open("verb_sample.txt",'w').write(str(verb_counts))
 
 driver.close()
