@@ -10,6 +10,7 @@ import nltk
 from bs4 import BeautifulSoup
 import numpy
 import collections
+from parsers import small_clean, strip_tags, keyword_parse, pos_counter, think_bank_parser
 
 def small_clean(xstr):
     if xstr is None:
@@ -41,11 +42,9 @@ class Institution:
         self.publications = publications
 
 class Publication(Institution):
-    def publish(self,title,author,subject,date,url):
+    def publish(self,title,date,url):
         publication_dict = dict(
             title = title,
-            author = author,
-            subject = subject,
             date = date,
             url = url)
         print publication_dict
@@ -77,10 +76,7 @@ def education():
     hudson_institute = Institution("The Hudson Institute","Conservative","http://www.hudson.org/",[])
     urban_institute = Institution("The Urban Institute","Liberal","http://www.urban.org/",[])
 
-    page = requests.get(base_url,timeout = 120)
-    souper = BeautifulSoup(page.content)
-
-    listblob = souper.findAll('td')[1]
+    
 
     return render_template('education.html')
 

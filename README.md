@@ -7,7 +7,4 @@ A webscraper that collects policy reports from a sampling of the foremost policy
 
 Features include:
 
--Return 150 word summary of first five reports from each think tank
--Get top word counts - top five for each think tank, each political orientation, and total
-
-
+-Get top word counts - top thirty nouns/verbs/concepts for each think tank, each political orientation, and total
