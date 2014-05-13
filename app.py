@@ -50,6 +50,37 @@ class Publication(Institution):
         print publication_dict
         self.publications.append(publication_dict)
 
+'''
+INSTANTIATE EVERY THINK TANK
+'''
+heritage_foundation = Institution("Heritage Foundation","Conservative","http://www.heritage.org",[])
+cato_institute = Institution("Cato Institute","Libertarian","http://www.cato.org",[])
+brookings_institution = Institution("Brookings Institution","Centrist","http://www.brookings.edu/",[])
+center_for_american_progress = Institution("Center for American Progress","Liberal","http://www.americanprogress.org/",[])
+american_enterprise_institute = Institution("American Enterprise Institute","Conservative","http://www.aei.org/",[])
+committee_for_economic_development = Institution("Committee for Economic Development","Centrist","http://www.ced.org/",[])
+new_america_foundation = Institution("New America Foundation","Centrist","http://www.newamerica.org/",[])
+pew_research_center = Institution("Pew Research Center","Centrist","http://www.pewresearch.org/",[])
+rand_corporation = Institution("RAND Corporation","Centrist","http://www.rand.org/",[])
+aspen_institute = Institution("The Aspen Institute","Centrist","http://www.aspeninstitute.org/",[])
+hudson_institute = Institution("The Hudson Institute","Conservative","http://www.hudson.org/",[])
+urban_institute = Institution("The Urban Institute","Liberal","http://www.urban.org/",[])
+
+institution_list = [
+    heritage_foundation,
+    cato_institute,
+    brookings_institution,
+    center_for_american_progress,
+    american_enterprise_institute,
+    committee_for_economic_development,
+    new_america_foundation,
+    pew_research_center,
+    rand_corporation,
+    aspen_institute,
+    hudson_institute,
+    urban_institute]
+
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -58,23 +89,7 @@ def home():
 
 @app.route('/education')
 def education():
-    base_url = "http://www.think-bank.org/searchform.php?aut=&tit=&top=education"
-
-    '''
-    INSTANTIATE EVERY THINK TANK
-    '''
-    heritage_foundation = Institution("Heritage Foundation","Conservative","http://www.heritage.org",[])
-    cato_institute = Institution("Cato Institute","Libertarian","http://www.cato.org",[])
-    brookings_institution = Institution("Brookings Institution","Centrist","http://www.brookings.edu/",[])
-    center_for_american_progress = Institution("Center for American Progress","Liberal","http://www.americanprogress.org/",[])
-    american_enterprise_institute = Institution("American Enterprise Institute","Conservative","http://www.aei.org/",[])
-    committee_for_economic_development = Institution("Committee for Economic Development","Centrist","http://www.ced.org/",[])
-    new_america_foundation = Institution("New America Foundation","Centrist","http://www.newamerica.org/",[])
-    pew_research_center = Institution("Pew Research Center","Centrist","http://www.pewresearch.org/",[])
-    rand_corporation = Institution("RAND Corporation","Centrist","http://www.rand.org/",[])
-    aspen_institute = Institution("The Aspen Institute","Centrist","http://www.aspeninstitute.org/",[])
-    hudson_institute = Institution("The Hudson Institute","Conservative","http://www.hudson.org/",[])
-    urban_institute = Institution("The Urban Institute","Liberal","http://www.urban.org/",[])
+    
 
     
 
