@@ -10,6 +10,12 @@ import re
 import nltk
 from nltk.corpus import stopwords
 import collections
+import lxml
+from lxml.html.clean import Cleaner
+
+cleaner = Cleaner()
+cleaner.javascript = True 
+cleaner.style = True
 
 def small_clean(xstr):
     if xstr is None:
@@ -22,11 +28,26 @@ def small_clean(xstr):
         xstr=re.sub(r"\t"," ",xstr)
         xstr=re.sub(r"`"," ",xstr)
         xstr=re.sub(r"--"," ",xstr)
-        xstr = re.sub(r'[^\w]', ' ', xstr)
+        #xstr = re.sub(r'[^\w]', ' ', xstr)
         xstr = ' '.join(xstr.split())
         xstr = xstr.encode('utf-8').strip()
         xstr=str(xstr)
         return xstr      
+
+def strip_java_css(text):
+  '''
+  scripts = re.compile(r'<script.*?/script>')
+  css = re.compile(r'<style.*?/style>')
+  tags = re.compile(r'<.*?>')
+
+  text = scripts.sub('', text)
+  text = css.sub('', text)
+  text = tags.sub('', text)
+  '''
+  text = re.sub(r'<script[^>]*?/script>', '',text)
+  text = re.sub(r'<style[^>]*?/style>', '',text)
+
+  return text
 
 def strip_tags(value):
     """Returns the given HTML with all tags stripped."""
@@ -90,12 +111,12 @@ def think_bank_parser(think_tank_name):
             publications.append(result)
 
             sub_url = url
-            page = requests.get(sub_url,timeout=120)
-            subsouper = BeautifulSoup(page.content)
-            for script in subsouper('script'):
-                script.extract()
-                subsouperstr = strip_tags(str(subsouper))
-                superblob = superblob + subsouperstr
+            
+            subsouperstr = lxml.html.tostring(cleaner.clean_html(lxml.html.parse(sub_url)))
+            subsouperstr = strip_tags(subsouperstr)
+            subsouperstr = re.sub(r'[^\w]', ' ', subsouperstr)
+            superblob = superblob + subsouperstr
+
     return publications, superblob
 
 def parse_all(institution_list):
