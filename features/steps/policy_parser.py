@@ -6,7 +6,7 @@ def step_impl(context):
 def step_impl(context):
     assert context.browser.title == "Policy Parser"
 
-@when(u'I click the "education" link')
+@when(u'I click the "results" link')
 def step_impl(context):
     br = context.browser
     br.get('http://localhost:5000')
@@ -14,12 +14,12 @@ def step_impl(context):
     ed_xpath = "/html/body/header/div/strong/nav/ul/li[2]/a"
 
     br.find_element_by_id("submit").click()
-'''
 
 @then(u'I should see the results page')
 def step_impl(context):
     br = context.browser
     assert br.find_element_by_id('results')
+'''
 @when(u"I submit 'How much wood could a woodchuck chuck if a woodchuck could chuck wood' for text to analyze")
 def step_impl(context):
     br = context.browser

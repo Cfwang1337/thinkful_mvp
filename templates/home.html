@@ -1,5 +1,51 @@
 {% extends "layout.html" %}
 {% block content %}
   <h2>Welcome to the Policy Parser!</h2>
-  <h3>An automated textual analysis of what the nation's leading think tanks are saying</h3>
+  <h3>An automated textual analysis of what the nation's leading think tanks are saying about education!</h3>
+    <p> <b> Enter the name of one of the following institutions: </b>
+    <br>
+    <br>
+    Heritage Foundation
+    <br>
+    Cato Institute
+    <br>
+    Brookings Institution
+    <br>
+    Center for American Progress
+    <br>
+    American Enterprise Institute
+    <br>
+    Committee for Economic Development
+    <br>
+    New America Foundation
+    <br>
+    Pew Research Center
+    <br>
+    RAND Corporation
+    <br>
+    The Aspen Institute
+    <br>
+    The Hudson Institute
+    <br>
+    The Urban Institute
+    <br>
+    <br>
+    You can also type in political leanings - conservative, liberal, centrist, libertarian - or "all" if you're ambitious
+    <br>
+    
+    </p>
+
+
+    <form action="/results" method="post">
+      <div name="form_field">
+        <label for="text_to_parse"> Enter: </label>
+        <textarea name = "input_to_parse" rows="1" cols="50"></textarea>
+      </div>
+      <input type="submit" id="submit" value="PARSE!" />
+    </form>
+
+    <p>
+    Special thanks to <b> think-bank.org </b> for aggregating links to policy reports
+    </p>
+
 {% endblock %}

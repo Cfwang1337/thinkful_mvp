@@ -87,13 +87,22 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/education')
-def education():
-    
+@app.route('/results', methods=['POST'])
+def results():
+    print request.form
+    input_to_parse = request.form['input_to_parse']
+    for institution in institution_list:
+        if str(input_to_parse) == institution.name:
+            institution_publications, institution_textblob = think_bank_parser(str(institution.name))
+            institution_noun_list, institution_verb_list = keyword_parse(institution_textblob)
+            institution_noun_count = pos_counter(institution_noun_list) 
+            institution_verb_count = pos_counter(institution_verb_list)
 
-    
+            result_dict = dict(
+                noun_count = institution_noun_count[:30],
+                verb_count = institution_verb_count[:30])
 
-    return render_template('education.html')
+    return render_template('results.html', data = result_dict)
 
 if __name__ == '__main__':
     app.run(debug=True)

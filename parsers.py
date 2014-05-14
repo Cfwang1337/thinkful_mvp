@@ -35,6 +35,7 @@ def strip_tags(value):
 def keyword_parse(textblob):
     noun_list = []
     verb_list = []
+    textblob = small_clean(textblob)
     text = nltk.word_tokenize(textblob)
     text = [w for w in text if not w in stopwords.words('english')]
     output = nltk.pos_tag(text)
@@ -74,7 +75,7 @@ def think_bank_parser(think_tank_name):
         result = {}
         institution = souper.findAll('td')[1].findAll('i')[numb].getText()
         institution = small_clean(institution)
-        print institution
+        #print institution
         if think_tank_name in institution:
             title = souper.findAll('td')[1].findAll('a')[numb].getText()
             print title
@@ -89,7 +90,7 @@ def think_bank_parser(think_tank_name):
             publications.append(result)
 
             sub_url = url
-            page = requests.get(suburl,timeout=120)
+            page = requests.get(sub_url,timeout=120)
             subsouper = BeautifulSoup(page.content)
             for script in subsouper('script'):
                 script.extract()

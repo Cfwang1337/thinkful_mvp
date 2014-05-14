@@ -10,24 +10,13 @@
             <h1 class="logo">Education Policy Parser - Keep Your Pulse On Think-Tanks From Across the Spectrum!</h1>
         <strong><nav>
                     <ul class="menu">
-                        <li><a href="{{ url_for('home') }}">Home</a></li>
-                        <li><a href="{{ url_for('education') }}">Education</a></li>                                               
+                        <li><a href="{{ url_for('home') }}">Home</a></li>                                               
                     </ul>
                 </nav></strong>
               </div>        
         </header>
         <div class ="container">
-            {% block content %}
-            <p> See what think-tanks of the following persuasions are suggesting:</p>
-              <input type="submit" id="submit" value="Liberal" />
-              <br>
-              <input type="submit" id="submit" value="Conservative" />
-              <br>
-              <input type="submit" id="submit" value="Centrist" />
-              <br>
-              <input type="submit" id="submit" value="Libertarian" />
-              <br>
-              <input type="submit" id="submit" value="All" />                     
+            {% block content %}              
             {% endblock %}
         </div>
     </body>
