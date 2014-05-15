@@ -35,15 +35,6 @@ def small_clean(xstr):
         return xstr      
 
 def strip_java_css(text):
-  '''
-  scripts = re.compile(r'<script.*?/script>')
-  css = re.compile(r'<style.*?/style>')
-  tags = re.compile(r'<.*?>')
-
-  text = scripts.sub('', text)
-  text = css.sub('', text)
-  text = tags.sub('', text)
-  '''
   text = re.sub(r'<script[^>]*?/script>', '',text)
   text = re.sub(r'<style[^>]*?/style>', '',text)
 
@@ -128,15 +119,16 @@ def parse_all(institution_list):
     nouns, verbs = keyword_parse(all_text)
 
     noun_counts = pos_counter(nouns)
-    print noun_counts
+    #print noun_counts
     verb_counts = pos_counter(verbs)
-    print verb_counts
+    #print verb_counts
 
     return noun_counts,verb_counts
 
 def parse_by_politics(ideology, institution_list):
     all_text = ""
     for institution in institution_list:
+        print institution.political_alignment
         if str(institution.political_alignment) == str(ideology):
             institution.publications, add_to_text = think_bank_parser(institution.name)
             all_text = all_text + add_to_text
@@ -144,18 +136,20 @@ def parse_by_politics(ideology, institution_list):
     nouns, verbs = keyword_parse(all_text)
 
     noun_counts = pos_counter(nouns)
-    print noun_counts
+    #print noun_counts
     verb_counts = pos_counter(verbs)
-    print verb_counts
+    #print verb_counts
 
     return noun_counts,verb_counts
 
 def parse_by_institution(think_tank_name):
-    institution.publications, all_text = think_bank_parser(think_tank_name)
+    publications, all_text = think_bank_parser(think_tank_name)
+    #print all_text
     nouns, verbs = keyword_parse(all_text)
 
-    print noun_counts
+    noun_counts = pos_counter(nouns)
+    #print noun_counts
     verb_counts = pos_counter(verbs)
-    print verb_counts
+    #print verb_counts
 
     return noun_counts,verb_counts    

@@ -10,7 +10,7 @@ import nltk
 from bs4 import BeautifulSoup
 import numpy
 import collections
-from parsers import small_clean, strip_tags, keyword_parse, pos_counter, think_bank_parser
+from parsers import small_clean, strip_tags, keyword_parse, pos_counter, think_bank_parser, parse_by_institution, parse_by_politics, parse_all
 
 def small_clean(xstr):
     if xstr is None:
@@ -66,19 +66,19 @@ aspen_institute = Institution("The Aspen Institute","Centrist","http://www.aspen
 hudson_institute = Institution("The Hudson Institute","Conservative","http://www.hudson.org/",[])
 urban_institute = Institution("The Urban Institute","Liberal","http://www.urban.org/",[])
 
-institution_list = [
-    heritage_foundation,
-    cato_institute,
-    brookings_institution,
-    center_for_american_progress,
-    american_enterprise_institute,
-    committee_for_economic_development,
-    new_america_foundation,
-    pew_research_center,
-    rand_corporation,
-    aspen_institute,
-    hudson_institute,
-    urban_institute]
+institution_object_list = [
+heritage_foundation,
+cato_institute,
+brookings_institution,
+center_for_american_progress,
+american_enterprise_institute,
+committee_for_economic_development,
+new_america_foundation,
+pew_research_center,
+rand_corporation,
+aspen_institute,
+hudson_institute,
+urban_institute]
 
 
 app = Flask(__name__)
@@ -91,16 +91,40 @@ def home():
 def results():
     print request.form
     input_to_parse = request.form['input_to_parse']
-    for institution in institution_list:
-        if str(input_to_parse) == institution.name:
-            institution_publications, institution_textblob = think_bank_parser(str(institution.name))
-            institution_noun_list, institution_verb_list = keyword_parse(institution_textblob)
-            institution_noun_count = pos_counter(institution_noun_list) 
-            institution_verb_count = pos_counter(institution_verb_list)
+    
+    text_by_ideology = ""
 
-            result_dict = dict(
-                noun_count = institution_noun_count[:30],
-                verb_count = institution_verb_count[:30])
+    institutions_by_name = []
+    list_of_ideologies = []
+
+    for institution in institution_object_list:
+        institutions_by_name.append(institution.name)
+        list_of_ideologies.append(institution.political_alignment)
+
+
+    list_of_ideologies = list(set(list_of_ideologies))        
+    print list_of_ideologies
+    print str(input_to_parse).title()
+    
+    if str(input_to_parse) in institutions_by_name:
+
+        institution_noun_count, institution_verb_count = parse_by_institution(input_to_parse)
+
+        result_dict = dict(
+            noun_count = institution_noun_count[:50],
+            verb_count = institution_verb_count[:50])
+    
+    elif str(input_to_parse).title() in list_of_ideologies:
+        institution_noun_count, institution_verb_count = parse_by_politics(str(input_to_parse).title(), institution_object_list)
+        result_dict = dict(
+            noun_count = institution_noun_count[:50],
+            verb_count = institution_verb_count[:50])
+
+    elif str(input_to_parse).title() == "All":
+        institution_noun_count, institution_verb_count = parse_all(institution_object_list)
+        result_dict = dict(
+            noun_count = institution_noun_count[:50],
+            verb_count = institution_verb_count[:50])
 
     return render_template('results.html', data = result_dict)
 
